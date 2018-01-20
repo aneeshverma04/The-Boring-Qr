@@ -8,4 +8,6 @@
     <string name="GenQr">Generate QR</string>
     <string name="importContact">import Contact</string>
     <string name="action_settings">Settings</string>
+    <string name="title_activity_generator">Generator</string>
+
 </resources>
