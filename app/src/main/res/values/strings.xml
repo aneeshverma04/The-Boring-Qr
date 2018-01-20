@@ -1,0 +1,11 @@
+<resources>
+    <string name="app_name">The Boring QR</string>
+
+    <string name="navigation_drawer_open">Open navigation drawer</string>
+    <string name="navigation_drawer_close">Close navigation drawer</string>
+
+    <string name="initial_text">The future is here old man</string>
+    <string name="GenQr">Generate QR</string>
+    <string name="importContact">import Contact</string>
+    <string name="action_settings">Settings</string>
+</resources>
