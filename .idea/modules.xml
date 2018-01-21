@@ -3,6 +3,8 @@
   <component name="ProjectModuleManager">
     <modules>
       <module fileurl="file://$PROJECT_DIR$/The-Boring-QR.iml" filepath="$PROJECT_DIR$/The-Boring-QR.iml" />
+      <module fileurl="file://$PROJECT_DIR$/The-Boring-Qr.iml" filepath="$PROJECT_DIR$/The-Boring-Qr.iml" />
+      <module fileurl="file://$PROJECT_DIR$/app/app.iml" filepath="$PROJECT_DIR$/app/app.iml" />
       <module fileurl="file://$PROJECT_DIR$/app/app.iml" filepath="$PROJECT_DIR$/app/app.iml" />
     </modules>
   </component>
