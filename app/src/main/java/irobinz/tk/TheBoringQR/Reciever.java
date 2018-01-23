@@ -8,6 +8,11 @@ import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.View;
+import android.widget.TextView;
+import android.widget.Toast;
+
+import com.google.zxing.integration.android.IntentIntegrator;
+import com.google.zxing.integration.android.IntentResult;
 
 public class Reciever extends AppCompatActivity {
 
@@ -27,8 +32,35 @@ public class Reciever extends AppCompatActivity {
             }
         });
 
+        //contact_add();
+        scanning_qr();
+    }
+    void scanning_qr() {
+        IntentIntegrator qrScan = new IntentIntegrator(this);
+        qrScan.initiateScan();
+    }
 
-// Class ContactsContract used .. help https://developer.android.com/training/contacts-provider/modify-data.html
+    public void onActivityResult(int requestCode, int resultCode, Intent intent) {
+        //retrieve scan result
+        IntentResult scanningResult = IntentIntegrator.parseActivityResult(requestCode, resultCode, intent);
+
+        if (scanningResult != null) {
+            //we have a result
+            String result_scan = scanningResult.getContents();
+            String scanFormat = scanningResult.getFormatName();
+            TextView text_temp = findViewById(R.id.textView3);
+            text_temp.setText(result_scan);
+        }
+        else{
+            Toast toast = Toast.makeText(getApplicationContext(),
+                    "No scan data received!", Toast.LENGTH_SHORT);
+            toast.show();
+        }
+    }
+
+
+    void contact_add() {
+        // Class ContactsContract used .. help https://developer.android.com/training/contacts-provider/modify-data.html
 
         Intent intent = new Intent(ContactsContract.Intents.Insert.ACTION);
         intent.setType(ContactsContract.RawContacts.CONTENT_TYPE);
@@ -40,6 +72,7 @@ public class Reciever extends AppCompatActivity {
                 .putExtra(ContactsContract.Intents.Insert.PHONE,"9872340544");
 
         startActivity(intent);
+
     }
 
 }

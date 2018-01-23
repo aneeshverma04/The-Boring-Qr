@@ -45,7 +45,7 @@ public class Generator extends AppCompatActivity {
 
         ImageView imageView = (ImageView) findViewById(R.id.imageView1);
         try {
-            Bitmap bitmap = encodeAsBitmap("abcdefg");
+            Bitmap bitmap = encodeAsBitmap("Aneesh Verma\n7986555855\nHouse number xyzzz");
             imageView.setImageBitmap(bitmap);
         } catch (WriterException e) {
             e.printStackTrace();
