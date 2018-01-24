@@ -71,7 +71,7 @@ public class MainActivity extends AppCompatActivity
                 Button btn = (Button)v;
                 btn.setText("I am blue Iice");
                 //Reciever.recieve();
-               // startActivity(new Intent(MainActivity.this,.class));
+                startActivity(new Intent(MainActivity.this,Reciever.class));
             }
         });
 
