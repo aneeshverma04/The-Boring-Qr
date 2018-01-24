@@ -1,7 +1,6 @@
 package irobinz.tk.TheBoringQR;
 
 import android.graphics.Bitmap;
-import android.graphics.Color;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
@@ -9,14 +8,8 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.View;
 import android.widget.ImageView;
-
-import com.google.zxing.BarcodeFormat;
-import com.google.zxing.MultiFormatWriter;
-import com.google.zxing.WriterException;
-import com.google.zxing.common.BitMatrix;
-
-import static android.graphics.Color.BLACK;
-import static android.graphics.Color.WHITE;
+import net.glxn.qrgen.android.QRCode;
+import net.glxn.qrgen.core.scheme.VCard;
 
 public class Generator extends AppCompatActivity {
 
@@ -27,9 +20,7 @@ public class Generator extends AppCompatActivity {
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
-
         init(); // calling of generation of qr
-
 
         FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
         fab.setOnClickListener(new View.OnClickListener() {
@@ -42,36 +33,17 @@ public class Generator extends AppCompatActivity {
         });
     }
     private void init() {
-
-        ImageView imageView = (ImageView) findViewById(R.id.imageView1);
-        try {
-            Bitmap bitmap = encodeAsBitmap("Aneesh Verma\n7986555855\nHouse number xyzzz");
-            imageView.setImageBitmap(bitmap);
-        } catch (WriterException e) {
-            e.printStackTrace();
-        }
+        ImageView imageView = findViewById(R.id.imageView1);
+        VCard vCard = getVCard();
+        Bitmap bitmap = QRCode.from(vCard).bitmap();
+        imageView.setImageBitmap(bitmap);
     }
 
-    Bitmap encodeAsBitmap(String str) throws WriterException {
-        BitMatrix result;
-        try {
-            result = new MultiFormatWriter().encode(str,
-                    BarcodeFormat.QR_CODE, 512, 512, null);
-        } catch (IllegalArgumentException iae) {
-            return null;
-        }
-        int w = result.getWidth();
-        int h = result.getHeight();
-        int[] pixels = new int[w * h];
-        for (int y = 0; y < h; y++) {
-            int offset = y * w;
-            for (int x = 0; x < w; x++) {
-                pixels[offset + x] = result.get(x, y) ? BLACK : WHITE;
-            }
-        }
-        Bitmap bitmap = Bitmap.createBitmap(w, h, Bitmap.Config.ARGB_8888);
-        bitmap.setPixels(pixels, 0, 512, 0, 0, w, h);
-        return bitmap;
+    private VCard getVCard() {
+        VCard vcard = new VCard();
+        vcard.setName("Robin");
+        vcard.setAddress("Sector 9");
+        vcard.setPhoneNumber("9815540544");
+        return vcard;
     }
-
 }
