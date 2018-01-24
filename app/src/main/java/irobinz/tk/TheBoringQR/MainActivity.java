@@ -1,6 +1,8 @@
 package irobinz.tk.TheBoringQR;
 
+import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
@@ -40,6 +42,10 @@ public class MainActivity extends AppCompatActivity
             }
         });
 
+
+        SharedPreferences sharedPref = this.getPreferences(Context.MODE_PRIVATE);
+        String name = "Hi" + sharedPref.getString("Name", "!");
+
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
                 this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
@@ -53,14 +59,24 @@ public class MainActivity extends AppCompatActivity
         * Button1 : Generate QR
         * */
         findViewById(R.id.button).setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Button btn = (Button)v;
-                btn.setText("Naya Don");
-                startActivity(new Intent(MainActivity.this,Generator.class));
-                }
-            }
+                                                         @Override
+                                                         public void onClick(View v) {
+                                                             Button btn = (Button)v;
+                                                             btn.setText("Naya Don");
+                                                             startActivity(new Intent(MainActivity.this,Generator.class));
+                                                         }
+                                                     }
         );
+        findViewById(R.id.formBtn).setOnClickListener(new View.OnClickListener() {
+                                                         @Override
+                                                         public void onClick(View v) {
+                                                             Button btn = (Button)v;
+                                                             btn.setText("Pressed");
+                                                             startActivity(new Intent(MainActivity.this,contact_form.class));
+                                                         }
+                                                     }
+        );
+
 
         /*
         * Button2 : Import Contacts
