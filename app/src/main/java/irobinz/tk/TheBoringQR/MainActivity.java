@@ -1,6 +1,8 @@
 package irobinz.tk.TheBoringQR;
 
+import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
@@ -21,8 +23,8 @@ import android.widget.TextView;
 * If doesnt like set "fixed" in constraints layout instead
 * Can also do match_parent however i doubt it will look good
 * */
-public class MainActivity extends AppCompatActivity
-        implements NavigationView.OnNavigationItemSelectedListener{
+public class MainActivity extends AppCompatActivity {
+        //implements NavigationView.OnNavigationItemSelectedListener{
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -31,36 +33,37 @@ public class MainActivity extends AppCompatActivity
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
-        FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
-        fab.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
-                        .setAction("Action", null).show();
-            }
-        });
 
-        DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
-        ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
-                this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
-        drawer.addDrawerListener(toggle);
-        toggle.syncState();
+        SharedPreferences sharedPref = getSharedPreferences("info", Context.MODE_PRIVATE);
+        String name = "Hi " + sharedPref.getString("Name", "!");
+        ((TextView)findViewById(R.id.textView2)).setText(name);
 
+        /*
         NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
-        navigationView.setNavigationItemSelectedListener(this);
+        navigationView.setNavigationItemSelectedListener(this); */
 
         /*
         * Button1 : Generate QR
         * */
         findViewById(R.id.button).setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Button btn = (Button)v;
-                btn.setText("Naya Don");
-                startActivity(new Intent(MainActivity.this,Generator.class));
-                }
-            }
+                                                         @Override
+                                                         public void onClick(View v) {
+                                                             Button btn = (Button)v;
+                                                             btn.setText("Naya Don");
+                                                             startActivity(new Intent(MainActivity.this,Generator.class));
+                                                         }
+                                                     }
         );
+        findViewById(R.id.formBtn).setOnClickListener(new View.OnClickListener() {
+                                                         @Override
+                                                         public void onClick(View v) {
+                                                             Button btn = (Button)v;
+                                                             btn.setText("Pressed");
+                                                             startActivity(new Intent(MainActivity.this,contact_form.class));
+                                                         }
+                                                     }
+        );
+
 
         /*
         * Button2 : Import Contacts
@@ -89,12 +92,6 @@ public class MainActivity extends AppCompatActivity
 
     @Override
     public void onBackPressed() {
-        DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
-        if (drawer.isDrawerOpen(GravityCompat.START)) {
-            drawer.closeDrawer(GravityCompat.START);
-        } else {
-            super.onBackPressed();
-        }
     }
 
     @Override
@@ -118,7 +115,8 @@ public class MainActivity extends AppCompatActivity
 
         return super.onOptionsItemSelected(item);
     }
-    @SuppressWarnings("StatementWithEmptyBody")
+    //@SuppressWarnings("StatementWithEmptyBody")
+    /*
     @Override
     public boolean onNavigationItemSelected(MenuItem item) {
         // Handle navigation view item clicks here.
@@ -141,5 +139,5 @@ public class MainActivity extends AppCompatActivity
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         drawer.closeDrawer(GravityCompat.START);
         return true;
-    }
+    }*/
 }
