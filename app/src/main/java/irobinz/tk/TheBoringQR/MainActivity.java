@@ -43,8 +43,9 @@ public class MainActivity extends AppCompatActivity
         });
 
 
-        SharedPreferences sharedPref = this.getPreferences(Context.MODE_PRIVATE);
-        String name = "Hi" + sharedPref.getString("Name", "!");
+        SharedPreferences sharedPref = getSharedPreferences("info", Context.MODE_PRIVATE);
+        String name = "Hi " + sharedPref.getString("Name", "!");
+        ((TextView)findViewById(R.id.textView2)).setText(name);
 
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(

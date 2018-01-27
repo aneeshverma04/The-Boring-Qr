@@ -7,15 +7,24 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.TextView;
 
 import java.util.Random;
 
 public class contact_form extends AppCompatActivity {
 
+    SharedPreferences sharedPref;
+    SharedPreferences.Editor editor;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_contact_form);
+
+        sharedPref = getSharedPreferences("info", Context.MODE_PRIVATE);
+        editor = sharedPref.edit();
+
+        fillForm();
+
         final Button submitBtn = findViewById(R.id.submit);
         submitBtn.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -27,9 +36,11 @@ public class contact_form extends AppCompatActivity {
 
     }
 
-    public void processSubmission() {
-        SharedPreferences sharedPref = this.getPreferences(Context.MODE_PRIVATE);
-        SharedPreferences.Editor editor = sharedPref.edit();
+    private void fillForm() {
+        ((TextView)findViewById(R.id.nameText)).setText(sharedPref.getString("Name", ""));
+    }
+
+    private void processSubmission() {
         editor.putString("Name", ((EditText)findViewById(R.id.nameText)).getText().toString());
         editor.commit();
     }
