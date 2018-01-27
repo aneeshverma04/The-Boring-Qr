@@ -22,10 +22,6 @@
             </intent-filter>
         </activity>
         <activity
-            android:name=".Generator"
-            android:label="@string/title_activity_generator"
-            android:theme="@style/AppTheme.NoActionBar" />
-        <activity
             android:name=".Reciever"
             android:label="@string/title_activity_reciever"
             android:theme="@style/AppTheme.NoActionBar" />
