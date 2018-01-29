@@ -63,14 +63,14 @@
             android:inputType="textEmailAddress" />
 
         <EditText
-            android:id="@+id/email2Text"
+            android:id="@+id/address"
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
             android:layout_marginBottom="10dp"
             android:layout_marginTop="10dp"
             android:backgroundTint="@color/colorPrimaryDark"
-            android:hint="Email (Work)"
-            android:inputType="textEmailAddress" />
+            android:hint="Address"
+            android:inputType="textPostalAddress" />
 
 
 

@@ -25,24 +25,18 @@ import net.glxn.qrgen.core.scheme.VCard;
 * Can also do match_parent however i doubt it will look good
 * */
 public class MainActivity extends AppCompatActivity {
-        //implements NavigationView.OnNavigationItemSelectedListener{
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
-
-
         SharedPreferences sharedPref = getSharedPreferences("info", Context.MODE_PRIVATE);
         String name = "Hi " + sharedPref.getString("Name", "!");
         ((TextView)findViewById(R.id.textView2)).setText(name);
-
-        /*
-        NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
-        navigationView.setNavigationItemSelectedListener(this); */
-
 
         findViewById(R.id.formBtn).setOnClickListener(new View.OnClickListener() {
                                                          @Override
@@ -53,8 +47,6 @@ public class MainActivity extends AppCompatActivity {
                 }
                     }
             );
-
-
         /*
         * Button2 : Import Contacts
         * */
@@ -113,13 +105,16 @@ public class MainActivity extends AppCompatActivity {
         VCard vCard = getVCard();
         Bitmap bitmap = QRCode.from(vCard).bitmap();
         imageView.setImageBitmap(bitmap);
-
     }
+
     private VCard getVCard() {
+        SharedPreferences sharedPref = getSharedPreferences("info", Context.MODE_PRIVATE);
         VCard vcard = new VCard();
-        vcard.setName("Robin");
-        vcard.setAddress("Sector 9");
-        vcard.setPhoneNumber("9815540544");
+        vcard.setName(sharedPref.getString("Name", ""));
+        vcard.setEmail(sharedPref.getString("Email", ""));
+        vcard.setPhoneNumber(sharedPref.getString("Phone", ""));
+        vcard.setAddress(sharedPref.getString("Address", ""));
+        vcard.setNote(sharedPref.getString("Note", ""));
         return vcard;
     }
 }
