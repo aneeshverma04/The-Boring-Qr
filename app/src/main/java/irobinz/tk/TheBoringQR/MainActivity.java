@@ -4,20 +4,32 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Bitmap;
+import android.net.Uri;
 import android.os.Bundle;
+import android.provider.ContactsContract;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
+import android.util.Log;
 import android.view.View;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.webkit.ConsoleMessage;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
+
+import com.google.zxing.integration.android.IntentIntegrator;
+import com.google.zxing.integration.android.IntentResult;
 
 import net.glxn.qrgen.android.QRCode;
 import net.glxn.qrgen.core.scheme.VCard;
+
+import java.io.File;
+
+import static android.provider.ContactsContract.Contacts.CONTENT_VCARD_TYPE;
 
 /*
 * Both buttons with layout of Wrap_Content... so it grows and shrinks accordingly
@@ -26,7 +38,7 @@ import net.glxn.qrgen.core.scheme.VCard;
 * */
 public class MainActivity extends AppCompatActivity {
 
-
+    static String [] sub_temp = new String[4]; // name,email,phone,address
     @Override
     protected void onCreate(Bundle savedInstanceState) {
 
@@ -54,9 +66,7 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 Button btn = (Button)v;
-                btn.setText("I am blue Iice");
-                //Reciever.recieve();
-                startActivity(new Intent(MainActivity.this,Reciever.class));
+                scanning_qr();
             }
         });
 
@@ -100,6 +110,10 @@ public class MainActivity extends AppCompatActivity {
         return super.onOptionsItemSelected(item);
     }
 
+
+
+
+    // Generation of QR
     private void GenerateQR() {
         ImageView imageView = findViewById(R.id.imageView2);
         VCard vCard = getVCard();
@@ -110,11 +124,66 @@ public class MainActivity extends AppCompatActivity {
     private VCard getVCard() {
         SharedPreferences sharedPref = getSharedPreferences("info", Context.MODE_PRIVATE);
         VCard vcard = new VCard();
-        vcard.setName(sharedPref.getString("Name", ""));
-        vcard.setEmail(sharedPref.getString("Email", ""));
-        vcard.setPhoneNumber(sharedPref.getString("Phone", ""));
-        vcard.setAddress(sharedPref.getString("Address", ""));
-        vcard.setNote(sharedPref.getString("Note", ""));
+        vcard.setName(sharedPref.getString("Name", "XYZ"));
+        vcard.setEmail(sharedPref.getString("Email", "abc@gmail.com"));
+        vcard.setPhoneNumber(sharedPref.getString("Phone", "12345"));
+        vcard.setAddress(sharedPref.getString("Address", "#3219 sd "));
+        //vcard.setNote(sharedPref.getString("Note", "NOTEE"));
         return vcard;
+    }
+
+
+
+
+    // Recieving of QR
+
+    void scanning_qr() {
+        IntentIntegrator qrScan = new IntentIntegrator(this);
+        qrScan.initiateScan();
+    }
+
+    public void onActivityResult(int requestCode, int resultCode, Intent intent) {
+        //retrieve scan result
+        IntentResult scanningResult = IntentIntegrator.parseActivityResult(requestCode, resultCode, intent);
+
+        if (scanningResult != null) {
+            //we have a result
+            String result_scan = scanningResult.getContents();
+
+            // splitting the vcard String into structured strings
+            String [] temp = result_scan.split("\n");
+
+            int len = temp.length;
+
+            for(int i = 2 ,j = 0; i < len && j < 4 ; i++) { // from name to note
+                int index = temp[i].indexOf(":");
+                sub_temp[j++] = temp[i].substring(index + 1);
+                //Log.v("check1",temp[i] + " " + sub_temp);
+            }
+        }
+        else{
+            Toast toast = Toast.makeText(getApplicationContext(),
+                    "No scan data received!", Toast.LENGTH_SHORT);
+            toast.show();
+        }
+        contact_add();
+    }
+
+    // Add recieved QR to contacts
+    void contact_add() {
+        // Class ContactsContract used .. help https://developer.android.com/training/contacts-provider/modify-data.html
+
+        Intent intent = new Intent(ContactsContract.Intents.Insert.ACTION);
+        intent.setType(ContactsContract.RawContacts.CONTENT_TYPE);
+
+        intent.putExtra(ContactsContract.Intents.Insert.NAME,sub_temp[0]);
+        intent.putExtra(ContactsContract.Intents.Insert.PHONE, ContactsContract.CommonDataKinds.Phone.TYPE_MOBILE)
+                .putExtra(ContactsContract.Intents.Insert.PHONE,sub_temp[1]);
+        intent.putExtra(ContactsContract.Intents.Insert.POSTAL, ContactsContract.CommonDataKinds.SipAddress.TYPE_HOME)
+                .putExtra(ContactsContract.Intents.Insert.POSTAL,sub_temp[3]);
+
+
+        startActivity(intent);
+
     }
 }
