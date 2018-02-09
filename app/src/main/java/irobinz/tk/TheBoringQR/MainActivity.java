@@ -161,10 +161,11 @@ public class MainActivity extends AppCompatActivity {
                 //Log.v("check1",temp[i] + " " + sub_temp);
             }
         }
+        // major bug if open up the scanner and press back button app closes
         else{
-            Toast toast = Toast.makeText(getApplicationContext(),
+           /* Toast toast = Toast.makeText(getApplicationContext(),
                     "No scan data received!", Toast.LENGTH_SHORT);
-            toast.show();
+            toast.show();*/
         }
         contact_add();
     }

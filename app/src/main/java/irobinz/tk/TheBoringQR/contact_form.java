@@ -48,7 +48,6 @@ public class contact_form extends AppCompatActivity {
                 colorAnimation.start();
             }
         });
-        super.onBackPressed();
     }
 
     private void fillForm() {
