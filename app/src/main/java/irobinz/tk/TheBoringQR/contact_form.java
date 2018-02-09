@@ -3,6 +3,7 @@ package irobinz.tk.TheBoringQR;
 import android.animation.ArgbEvaluator;
 import android.animation.ValueAnimator;
 import android.content.Context;
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -46,6 +47,8 @@ public class contact_form extends AppCompatActivity {
 
                 });
                 colorAnimation.start();
+                finish();
+                startActivity(new Intent(contact_form.this,MainActivity.class));
             }
         });
     }

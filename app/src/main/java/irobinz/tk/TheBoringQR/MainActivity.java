@@ -55,6 +55,7 @@ public class MainActivity extends AppCompatActivity {
                                                          public void onClick(View v) {
             Button btn = (Button)v;
             btn.setText("Pressed");
+            finish();
             startActivity(new Intent(MainActivity.this,contact_form.class));
                 }
                     }
@@ -150,6 +151,8 @@ public class MainActivity extends AppCompatActivity {
             //we have a result
             String result_scan = scanningResult.getContents();
 
+            if (result_scan == null)
+                return;
             // splitting the vcard String into structured strings
             String [] temp = result_scan.split("\n");
 
@@ -163,13 +166,22 @@ public class MainActivity extends AppCompatActivity {
         }
         // major bug if open up the scanner and press back button app closes
         else{
-           /* Toast toast = Toast.makeText(getApplicationContext(),
+            Toast toast = Toast.makeText(getApplicationContext(),
                     "No scan data received!", Toast.LENGTH_SHORT);
-            toast.show();*/
+            toast.show();
         }
         contact_add();
     }
-
+/*
+*   sub_temp index:
+ *   0 ==> Name
+ *   1 ==> phone
+ *   2 ==> email
+ *   3 ==> Address
+*
+*
+*
+* */
     // Add recieved QR to contacts
     void contact_add() {
         // Class ContactsContract used .. help https://developer.android.com/training/contacts-provider/modify-data.html
@@ -180,9 +192,10 @@ public class MainActivity extends AppCompatActivity {
         intent.putExtra(ContactsContract.Intents.Insert.NAME,sub_temp[0]);
         intent.putExtra(ContactsContract.Intents.Insert.PHONE, ContactsContract.CommonDataKinds.Phone.TYPE_MOBILE)
                 .putExtra(ContactsContract.Intents.Insert.PHONE,sub_temp[1]);
+        intent.putExtra(ContactsContract.Intents.Insert.EMAIL, ContactsContract.CommonDataKinds.Email.ADDRESS)
+                .putExtra(ContactsContract.Intents.Insert.EMAIL,sub_temp[2]);
         intent.putExtra(ContactsContract.Intents.Insert.POSTAL, ContactsContract.CommonDataKinds.SipAddress.TYPE_HOME)
                 .putExtra(ContactsContract.Intents.Insert.POSTAL,sub_temp[3]);
-
 
         startActivity(intent);
 
