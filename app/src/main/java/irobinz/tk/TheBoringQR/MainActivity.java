@@ -4,18 +4,13 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Bitmap;
-import android.net.Uri;
 import android.os.Bundle;
 import android.provider.ContactsContract;
-import android.support.design.widget.FloatingActionButton;
-import android.support.design.widget.Snackbar;
-import android.util.Log;
 import android.view.View;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.webkit.ConsoleMessage;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -26,8 +21,7 @@ import com.google.zxing.integration.android.IntentResult;
 
 import net.glxn.qrgen.android.QRCode;
 import net.glxn.qrgen.core.scheme.VCard;
-
-import java.io.File;
+import ezvcard.Ezvcard;
 
 import static android.provider.ContactsContract.Contacts.CONTENT_VCARD_TYPE;
 
@@ -125,11 +119,12 @@ public class MainActivity extends AppCompatActivity {
     private VCard getVCard() {
         SharedPreferences sharedPref = getSharedPreferences("info", Context.MODE_PRIVATE);
         VCard vcard = new VCard();
-        vcard.setName(sharedPref.getString("Name", "XYZ"));
-        vcard.setEmail(sharedPref.getString("Email", "abc@gmail.com"));
-        vcard.setPhoneNumber(sharedPref.getString("Phone", "12345"));
-        vcard.setAddress(sharedPref.getString("Address", "#3219 sd "));
-        //vcard.setNote(sharedPref.getString("Note", "NOTEE"));
+        vcard.setName(sharedPref.getString("Name", ""));
+        vcard.setEmail(sharedPref.getString("Email", ""));
+        vcard.setPhoneNumber(sharedPref.getString("Phone", ""));
+        vcard.setAddress(sharedPref.getString("Address", ""));
+        vcard.setCompany(sharedPref.getString("Organisation", ""));
+        vcard.setNote(sharedPref.getString("Note", "NOTEE"));
         return vcard;
     }
 
@@ -146,10 +141,11 @@ public class MainActivity extends AppCompatActivity {
     public void onActivityResult(int requestCode, int resultCode, Intent intent) {
         //retrieve scan result
         IntentResult scanningResult = IntentIntegrator.parseActivityResult(requestCode, resultCode, intent);
-
+        ezvcard.VCard vCard = new ezvcard.VCard();
         if (scanningResult != null) {
             //we have a result
             String result_scan = scanningResult.getContents();
+            vCard = Ezvcard.parse(result_scan).first();
 
             if (result_scan == null)
                 return;
@@ -170,32 +166,43 @@ public class MainActivity extends AppCompatActivity {
                     "No scan data received!", Toast.LENGTH_SHORT);
             toast.show();
         }
-        contact_add();
+        contact_add(vCard);
     }
-/*
-*   sub_temp index:
- *   0 ==> Name
- *   1 ==> phone
- *   2 ==> email
- *   3 ==> Address
-*
-*
-*
-* */
+
     // Add recieved QR to contacts
-    void contact_add() {
+    void contact_add(ezvcard.VCard vCard) {
         // Class ContactsContract used .. help https://developer.android.com/training/contacts-provider/modify-data.html
 
         Intent intent = new Intent(ContactsContract.Intents.Insert.ACTION);
         intent.setType(ContactsContract.RawContacts.CONTENT_TYPE);
 
-        intent.putExtra(ContactsContract.Intents.Insert.NAME,sub_temp[0]);
+        intent.putExtra(ContactsContract.Intents.Insert.NAME,vCard.getStructuredName().getFamily());
+
+        String email = "";
+        String notes = "";
+        String address = "";
+        String organisation = "";
+        String mobileNumber = "";
+
+        if (vCard.getAddresses() != null)
+            address = vCard.getAddresses().get(0).getPoBox();
+        if (vCard.getTelephoneNumbers() != null)
+            mobileNumber = vCard.getTelephoneNumbers().get(0).getText();
+        if (vCard.getEmails() != null)
+            email = vCard.getEmails().get(0).getValue();
+        if (vCard.getOrganization() != null)
+            organisation = vCard.getOrganization().getValues().get(0);
+        if (vCard.getNotes() != null)
+            notes = vCard.getNotes().get(0).getValue();
+
         intent.putExtra(ContactsContract.Intents.Insert.PHONE, ContactsContract.CommonDataKinds.Phone.TYPE_MOBILE)
-                .putExtra(ContactsContract.Intents.Insert.PHONE,sub_temp[1]);
+                .putExtra(ContactsContract.Intents.Insert.PHONE, mobileNumber);
         intent.putExtra(ContactsContract.Intents.Insert.EMAIL, ContactsContract.CommonDataKinds.Email.ADDRESS)
-                .putExtra(ContactsContract.Intents.Insert.EMAIL,sub_temp[2]);
+                .putExtra(ContactsContract.Intents.Insert.EMAIL,email);
         intent.putExtra(ContactsContract.Intents.Insert.POSTAL, ContactsContract.CommonDataKinds.SipAddress.TYPE_HOME)
-                .putExtra(ContactsContract.Intents.Insert.POSTAL,sub_temp[3]);
+                .putExtra(ContactsContract.Intents.Insert.POSTAL,address);
+        intent.putExtra(ContactsContract.Intents.Insert.COMPANY, organisation);
+        intent.putExtra(ContactsContract.Intents.Insert.NOTES, notes);
 
         startActivity(intent);
 

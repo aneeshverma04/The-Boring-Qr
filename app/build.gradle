@@ -34,4 +34,5 @@ dependencies {
     compile 'com.journeyapps:zxing-android-embedded:3.5.0'
     compile 'com.android.support:appcompat-v7:26.1.0'
     compile 'com.github.kenglxn.QRGen:android:2.4.0'
+    compile 'com.googlecode.ez-vcard:ez-vcard:0.10.3'
 }

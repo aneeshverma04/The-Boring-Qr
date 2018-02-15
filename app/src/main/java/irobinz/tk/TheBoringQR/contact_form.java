@@ -36,7 +36,8 @@ public class contact_form extends AppCompatActivity {
                 submitBtn.setText("Updating..");
                 int colorFrom = getResources().getColor(R.color.colorPrimaryDark);
                 int colorTo = getResources().getColor(R.color.colorPrimary);
-                ValueAnimator colorAnimation = ValueAnimator.ofObject(new ArgbEvaluator(), colorFrom, colorTo);
+                ValueAnimator colorAnimation = ValueAnimator.ofObject(new ArgbEvaluator(),
+                        colorFrom, colorTo);
                 colorAnimation.setDuration(250); // milliseconds
                 colorAnimation.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
 
@@ -64,6 +65,9 @@ public class contact_form extends AppCompatActivity {
                 .setText(sharedPref.getString("Address", ""));
         ((TextView)findViewById(R.id.noteText))
                 .setText(sharedPref.getString("Note", ""));
+        ((TextView)findViewById(R.id.organisationText))
+                .setText(sharedPref.getString("Organisation", ""));
+
     }
 
     private void processSubmission() {
@@ -77,6 +81,9 @@ public class contact_form extends AppCompatActivity {
                 ((EditText)findViewById(R.id.address)).getText().toString());
         editor.putString("Note",
                 ((EditText)findViewById(R.id.noteText)).getText().toString());
+        editor.putString("Organisation",
+                ((EditText)findViewById(R.id.organisationText)).getText().toString());
+
         editor.commit();
     }
 }

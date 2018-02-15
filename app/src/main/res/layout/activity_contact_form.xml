@@ -37,20 +37,6 @@
             android:backgroundTint="@color/colorPrimaryDark"
             android:hint="Phone"
             android:inputType="phone" />
-        <EditText
-            android:id="@+id/phone2Text"
-            android:layout_width="fill_parent"
-            android:layout_height="wrap_content"
-            android:backgroundTint="@color/colorPrimaryDark"
-            android:hint="Landline"
-            android:inputType="phone" />
-        <EditText
-            android:id="@+id/phone3Text"
-            android:layout_width="fill_parent"
-            android:layout_height="wrap_content"
-            android:backgroundTint="@color/colorPrimaryDark"
-            android:hint="Phone (Work)"
-            android:inputType="phone" />
 
         <EditText
             android:id="@+id/email1Text"
@@ -87,16 +73,6 @@
                 android:layout_marginTop="10dp"
                 android:backgroundTint="@color/colorPrimaryDark"
                 android:hint="Organisation"
-                android:inputType="text" />
-            <EditText
-                android:id="@+id/jobTitleText"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginBottom="10dp"
-                android:layout_marginTop="10dp"
-                android:layout_marginLeft="10dp"
-                android:backgroundTint="@color/colorPrimaryDark"
-                android:hint="Job Title"
                 android:inputType="text" />
         </LinearLayout>
 
